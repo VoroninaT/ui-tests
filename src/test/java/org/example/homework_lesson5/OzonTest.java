@@ -1,6 +1,8 @@
 package org.example.homework_lesson5;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.example.lesson6.CategoryProductPage;
+import org.example.lesson6.SmartphonesPage;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -17,7 +19,6 @@ public class OzonTest {
     WebDriverWait wait;
     Actions actions;
     private  final static  String OZON_BASE_URL = "https://www.ozon.ru/";
-
 
     @BeforeAll
     static void registerDriver() {
@@ -36,37 +37,37 @@ public class OzonTest {
     @Test
     void hoverCategoryProductTest() throws InterruptedException {
         driver.get(OZON_BASE_URL);
-        driver.findElement(By.xpath("//span[text()='Каталог']")).click();
-        waitVisibilityOfElementLocated("//span[text()='Электроника']");
-        driver.findElement(By.xpath("//span[text()='Электроника']")).click();
 
-        Actions builder = new Actions(driver);
-        waitVisibilityOfElementLocated("//div[@class='bz6']//a[contains(.,'Бытовая техника')]");
-        WebElement element1 = driver.findElement(By.xpath("//div[@class='bz6']//a[contains(.,'Бытовая техника')]"));
-        WebElement element2 = driver.findElement(By.xpath("//a[contains(.,'Крупная бытовая техника')]"));
-        builder.moveToElement(element1)
-                .click(element2)
-                .perform();
-        Assertions.assertEquals(driver.getCurrentUrl(), "https://www.ozon.ru/category/krupnaya-bytovaya-tehnika-10501/");
-        Thread.sleep(5000);
+        CategoryProductPage categoryProductPage = new CategoryProductPage(driver);
+        categoryProductPage.clickCatalogButton();
+        waitVisibilityOfElementLocated("//span[text()='Электроника']");
+        categoryProductPage.clickElectronicButton();
+        categoryProductPage.clickAppliancesButton()
+                .clickLargeAppliancesButton();
+
+       Assertions.assertEquals(driver.getCurrentUrl(), "https://www.ozon.ru/category/krupnaya-bytovaya-tehnika-10501/");
     }
 
     @Test
     void addingProductToCartTest() throws InterruptedException {
         driver.get(OZON_BASE_URL);
-        driver.findElement(By.xpath("//span[text()='Каталог']")).click();
+
+        CategoryProductPage categoryProductPage = new CategoryProductPage(driver);
+        categoryProductPage.clickCatalogButton();
         waitVisibilityOfElementLocated("//span[text()='Электроника']");
-        driver.findElement(By.xpath("//span[text()='Электроника']")).click();
-        waitVisibilityOfElementLocated("//div[@class='bag1']//a[contains(.,'Смартфоны')]");
-        driver.findElement(By.xpath("//div[@class='bag1']//a[contains(.,'Смартфоны')]")).click();
+        categoryProductPage.clickElectronicButton();
+
+        SmartphonesPage smartphonesPage = new SmartphonesPage(driver);
+        waitVisibilityOfElementLocated("//div[@class='a4gb ab9f']//a[contains(.,'Смартфоны')]");
+        smartphonesPage.clickSmartphonesButton();
         waitVisibilityOfElementLocated("//button[contains(.,'В корзину')][1]");
-        driver.findElement(By.xpath("//button[contains(.,'В корзину')][1]")).click();
-        driver.findElement(By.xpath("//a[@href='/cart' ]")).click();
+        smartphonesPage.clickAddToCartButton();
+        smartphonesPage.clickCartButton();
+
         WebElement GoToFormalization = driver.findElement(By.xpath("(//div[.='Перейти к оформлению']/button)[1]"));
         Assertions.assertNotNull(GoToFormalization);
 
     }
-
 
     @AfterEach
     void tearDown() {
