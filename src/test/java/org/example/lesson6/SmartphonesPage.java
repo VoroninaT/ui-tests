@@ -10,10 +10,10 @@ public class SmartphonesPage extends BaseView {
     public SmartphonesPage(WebDriver driver) {
         super(driver);
     }
-    @FindBy(xpath = "//div[@class='gba4']//a[contains(.,'Смартфоны')]")
+    @FindBy(xpath = "//a[@target='_self'][contains(.,'Смартфоны')]")
     public WebElement smartphonesButton;
 
-    @FindBy(xpath = "//div[@class='ui-b1']//button[contains(.,'В корзину')][1]")
+    @FindBy(xpath = "//button[contains(.,'В корзину')][1]")
     public WebElement addToCartButton;
 
     @FindBy(xpath = "//a[@href='/cart' ]")

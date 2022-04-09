@@ -2,6 +2,7 @@ package org.example.homework_lesson5;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Allure;
+import io.qameta.allure.Feature;
 import org.example.lesson6.CategoryProductPage;
 import org.example.lesson6.SmartphonesPage;
 import org.example.lesson7.CustomLogger;
@@ -55,6 +56,7 @@ public class OzonTest {
     }
 
     @Test
+    @Feature("Добавление товара в корзину")
     void addingProductToCartTest() throws InterruptedException {
         driver.get(OZON_BASE_URL);
 
@@ -64,9 +66,9 @@ public class OzonTest {
         categoryProductPage.clickElectronicButton();
 
         SmartphonesPage smartphonesPage = new SmartphonesPage(driver);
-        waitVisibilityOfElementLocated("//div[@class='gba4']//a[contains(.,'Смартфоны')]");
+        waitVisibilityOfElementLocated("//a[@target='_self'][contains(.,'Смартфоны')]");
         smartphonesPage.clickSmartphonesButton();
-        waitVisibilityOfElementLocated("//div[@class='ui-b1']//button[contains(.,'В корзину')][1]");
+        waitVisibilityOfElementLocated("//button[contains(.,'В корзину')][1]");
         smartphonesPage.clickAddToCartButton();
         smartphonesPage.clickCartButton();
     }
